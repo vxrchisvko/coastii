@@ -72,86 +72,30 @@ function WindowTable:Window(Htitle,GMtitle,toclose)
 	CloseBind = toclose or Enum.KeyCode.RightControl
 	local fs = false
 	local uitoggled = false
-	UserInputService.InputBegan:Connect(
-		function(io, p)
-			if io.KeyCode == CloseBind then
-				if uitoggled == false then
-					TweenService:Create(
-						MainFrame,
-						TweenInfo.new(.35, Enum.EasingStyle.Quart, Enum.EasingDirection.Out),
-						{Size = UDim2.new(0, 0, 0, 0)}
-					):Play()
-					TweenService:Create(
-						MainFrameGlow,
-						TweenInfo.new(.32, Enum.EasingStyle.Quart, Enum.EasingDirection.Out),
-						{Size = UDim2.new(0, 0, 0, 0)}
-					):Play()
-					TweenService:Create(
-						MainFrameGlow1,
-						TweenInfo.new(.35, Enum.EasingStyle.Quart, Enum.EasingDirection.Out),
-						{ImageTransparency = 1}
-					):Play()
-					TweenService:Create(
-						MainFrameGlow2,
-						TweenInfo.new(.35, Enum.EasingStyle.Quart, Enum.EasingDirection.Out),
-						{ImageTransparency = 1}
-					):Play()
-					wait(.35)
-					ShadowFrame.Visible = false
-					uitoggled = true
-				else
-					if LeftFrame.Size == UDim2.new(0, 144,0, 331) then
-						TweenService:Create(
-							LeftFrame,
-							TweenInfo.new(.0, Enum.EasingStyle.Quart, Enum.EasingDirection.Out),
-							{Size = UDim2.new(0, 41,0, 331)}
-						):Play()
-						TweenService:Create(
-							LeftFrameBtnIcon,
-							TweenInfo.new(.0, Enum.EasingStyle.Quart, Enum.EasingDirection.Out),
-							{Rotation = 270}
-						):Play()
-						TweenService:Create(
-							SecondaryTabs,
-							TweenInfo.new(.0, Enum.EasingStyle.Quart, Enum.EasingDirection.Out),
-							{Size = UDim2.new(0, 144,0, 0)}
-						):Play()
-						TweenService:Create(
-							MainTabsBtnIcon,
-							TweenInfo.new(.0, Enum.EasingStyle.Quart, Enum.EasingDirection.Out),
-							{Rotation = 270}
-						):Play()
-					end
-					TweenService:Create(
-						MainFrame,
-						TweenInfo.new(.35, Enum.EasingStyle.Quart, Enum.EasingDirection.Out),
-						{Size = UDim2.new(0, 448, 0, 331)}
-					):Play()
-					TweenService:Create(
-						MainFrameGlow,
-						TweenInfo.new(.35, Enum.EasingStyle.Quart, Enum.EasingDirection.Out),
-						{Size = UDim2.new(0, 448, 0, 331)}
-					):Play()
-					TweenService:Create(
-						MainFrameGlow1,
-						TweenInfo.new(.35, Enum.EasingStyle.Quart, Enum.EasingDirection.Out),
-						{ImageTransparency = 0}
-					):Play()
-					TweenService:Create(
-						MainFrameGlow2,
-						TweenInfo.new(.35, Enum.EasingStyle.Quart, Enum.EasingDirection.Out),
-						{ImageTransparency = 0}
-					):Play()
-					MainFrameGlow.Visible = true
-					uitoggled = false
-				end
-			end
-		end)
+	UserInputService.InputBegan:Connect(function(io, p)
+		if p or io.KeyCode ~= CloseBind then return end
+		uitoggled = not uitoggled
+		if uitoggled then
+			TweenService:Create(MainFrame, TweenInfo.new(.35, Enum.EasingStyle.Quart, Enum.EasingDirection.Out), {Size = UDim2.new(0, 0, 0, 0)}):Play()
+			TweenService:Create(MainFrameGlow, TweenInfo.new(.35, Enum.EasingStyle.Quart, Enum.EasingDirection.Out), {Size = UDim2.new(0, 0, 0, 0)}):Play()
+			TweenService:Create(MainFrameGlow1, TweenInfo.new(.35, Enum.EasingStyle.Quart, Enum.EasingDirection.Out), {ImageTransparency = 1}):Play()
+			TweenService:Create(MainFrameGlow2, TweenInfo.new(.35, Enum.EasingStyle.Quart, Enum.EasingDirection.Out), {ImageTransparency = 1}):Play()
+			ShadowFrame.Visible = false
+		else
+			MainFrameGlow.Visible = true
+			TweenService:Create(MainFrame, TweenInfo.new(.35, Enum.EasingStyle.Quart, Enum.EasingDirection.Out), {Size = UDim2.new(0, 448, 0, 331)}):Play()
+			TweenService:Create(MainFrameGlow, TweenInfo.new(.35, Enum.EasingStyle.Quart, Enum.EasingDirection.Out), {Size = UDim2.new(0, 448, 0, 331)}):Play()
+			TweenService:Create(MainFrameGlow1, TweenInfo.new(.35, Enum.EasingStyle.Quart, Enum.EasingDirection.Out), {ImageTransparency = 0}):Play()
+			TweenService:Create(MainFrameGlow2, TweenInfo.new(.35, Enum.EasingStyle.Quart, Enum.EasingDirection.Out), {ImageTransparency = 0}):Play()
+		end
+	end)
+
 	Library.Name = "Library"
-	Library.Parent = game.CoreGui
+	Library.Parent = LocalPlayer:WaitForChild("PlayerGui")
 	Library.ZIndexBehavior = Enum.ZIndexBehavior.Sibling
 	Library.ResetOnSpawn = false
 	Library.IgnoreGuiInset = false
+	Library.DisplayOrder = 50
 
 	MainFrame.Name = "MainFrame"
 	MainFrame.Parent = MainFrameGlow
@@ -256,7 +200,8 @@ function WindowTable:Window(Htitle,GMtitle,toclose)
 	LeftFrameBtnIcon.Selectable = true
 	LeftFrameBtnIcon.Size = UDim2.new(0, 27, 0, 27)
 	LeftFrameBtnIcon.ZIndex = 3
-	LeftFrameBtnIcon.Image = "rbxassetid://5844057859"
+	LeftFrameBtnIcon.Image = ""
+	LeftFrameBtnIcon.Visible = false
 
 	MainTabs.Name = "MainTabs"
 	MainTabs.Parent = LeftFrame
@@ -286,7 +231,7 @@ function WindowTable:Window(Htitle,GMtitle,toclose)
 	MainTabsBtnTitle.Parent = MainTabsBtn
 	MainTabsBtnTitle.BackgroundColor3 = Color3.fromRGB(255, 255, 255)
 	MainTabsBtnTitle.BackgroundTransparency = 1.000
-	MainTabsBtnTitle.Position = UDim2.new({0, 0},0, 0)
+	MainTabsBtnTitle.Position = UDim2.new(0, 0, 0, 0)
 	MainTabsBtnTitle.Size = UDim2.new(0.744, 0,1, 0)
 	MainTabsBtnTitle.ZIndex = 3
 	MainTabsBtnTitle.Font = Enum.Font.Gotham
@@ -305,7 +250,8 @@ function WindowTable:Window(Htitle,GMtitle,toclose)
 	MainTabsBtnIcon.Selectable = true
 	MainTabsBtnIcon.Size = UDim2.new(0, 21, 0, 21)
 	MainTabsBtnIcon.ZIndex = 3
-	MainTabsBtnIcon.Image = "rbxassetid://5844057859"
+	MainTabsBtnIcon.Image = ""
+	MainTabsBtnIcon.Visible = false
 
 	Shapes.Name = "Shapes"
 	Shapes.Parent = MainTabs
@@ -392,6 +338,70 @@ function WindowTable:Window(Htitle,GMtitle,toclose)
 	Title.TextXAlignment = Enum.TextXAlignment.Left
 	Title.TextTransparency = 0
 
+
+	-- Window controls: minimize, restore and close.
+	local function makeWindowButton(name, label, x, color)
+		local button = Instance.new("TextButton")
+		button.Name = name
+		button.Parent = MainFrame
+		button.AnchorPoint = Vector2.new(1, 0)
+		button.Position = UDim2.new(1, x, 0, 9)
+		button.Size = UDim2.new(0, 25, 0, 23)
+		button.BackgroundColor3 = color
+		button.BackgroundTransparency = 0.12
+		button.BorderSizePixel = 0
+		button.AutoButtonColor = true
+		button.Font = Enum.Font.GothamBold
+		button.Text = label
+		button.TextColor3 = Color3.fromRGB(255, 255, 255)
+		button.TextSize = 16
+		button.ZIndex = 20
+		local corner = Instance.new("UICorner")
+		corner.CornerRadius = UDim.new(0, 5)
+		corner.Parent = button
+		return button
+	end
+
+	local MinimizeButton = makeWindowButton("MinimizeButton", "–", -39, Color3.fromRGB(63, 59, 88))
+	local CloseButton = makeWindowButton("CloseButton", "×", -9, Color3.fromRGB(160, 57, 72))
+
+	local RestoreButton = Instance.new("TextButton")
+	RestoreButton.Name = "RestoreButton"
+	RestoreButton.Parent = Library
+	RestoreButton.AnchorPoint = Vector2.new(0, 0.5)
+	RestoreButton.Position = UDim2.new(0, 18, 0.5, 0)
+	RestoreButton.Size = UDim2.new(0, 42, 0, 42)
+	RestoreButton.BackgroundColor3 = Color3.fromRGB(31, 28, 54)
+	RestoreButton.BorderSizePixel = 0
+	RestoreButton.Font = Enum.Font.GothamBold
+	RestoreButton.Text = "N"
+	RestoreButton.TextColor3 = Color3.fromRGB(255, 255, 255)
+	RestoreButton.TextSize = 16
+	RestoreButton.Visible = false
+	RestoreButton.ZIndex = 30
+	local RestoreCorner = Instance.new("UICorner")
+	RestoreCorner.CornerRadius = UDim.new(1, 0)
+	RestoreCorner.Parent = RestoreButton
+
+	MinimizeButton.MouseButton1Click:Connect(function()
+		MainFrameGlow.Visible = false
+		RestoreButton.Visible = true
+	end)
+
+	RestoreButton.MouseButton1Click:Connect(function()
+		RestoreButton.Visible = false
+		MainFrameGlow.Visible = true
+		uitoggled = false
+		TweenService:Create(MainFrame, TweenInfo.new(.35, Enum.EasingStyle.Quart, Enum.EasingDirection.Out), {Size = UDim2.new(0, 448, 0, 331)}):Play()
+		TweenService:Create(MainFrameGlow, TweenInfo.new(.35, Enum.EasingStyle.Quart, Enum.EasingDirection.Out), {Size = UDim2.new(0, 448, 0, 331)}):Play()
+		TweenService:Create(MainFrameGlow1, TweenInfo.new(.35, Enum.EasingStyle.Quart, Enum.EasingDirection.Out), {ImageTransparency = 0}):Play()
+		TweenService:Create(MainFrameGlow2, TweenInfo.new(.35, Enum.EasingStyle.Quart, Enum.EasingDirection.Out), {ImageTransparency = 0}):Play()
+	end)
+
+	CloseButton.MouseButton1Click:Connect(function()
+		Library:Destroy()
+	end)
+
 	ShadowFrame.Name = "ShadowFrame"
 	ShadowFrame.Parent = MainFrame
 	ShadowFrame.BackgroundColor3 = Color3.fromRGB(0, 0, 0)
@@ -416,112 +426,25 @@ function WindowTable:Window(Htitle,GMtitle,toclose)
 	AllPages.BackgroundTransparency = 0
 	AllPages.Visible = true
 	
-	local tog3 = false
-
-	LeftFrameBtn.MouseButton1Click:Connect(function()
-		tog3 = not tog3
-		if LeftFrame.Size == UDim2.new(0, 41,0, 331) then
-			tog3 = true
-		end
-		if tog3 then
-			ShadowFrame.Visible = true
-			TweenService:Create(
-				LeftFrame,
-				TweenInfo.new(.35, Enum.EasingStyle.Quart, Enum.EasingDirection.Out),
-				{Size = UDim2.new(0, 144,0, 331)}
-			):Play()
-			TweenService:Create(
-				ShadowFrame,
-				TweenInfo.new(.35, Enum.EasingStyle.Quart, Enum.EasingDirection.Out),
-				{BackgroundTransparency = 0.68}
-			):Play()
-			TweenService:Create(
-				LeftFrameBtnIcon,
-				TweenInfo.new(.35, Enum.EasingStyle.Quart, Enum.EasingDirection.Out),
-				{Rotation = 90}
-			):Play()
-			wait(.16)
-			TweenService:Create(
-				SecondaryTabs,
-				TweenInfo.new(.35, Enum.EasingStyle.Quart, Enum.EasingDirection.Out),
-				{Size = UDim2.new(0, 144,0, 172)}
-			):Play()
-			TweenService:Create(
-				MainTabsBtnIcon,
-				TweenInfo.new(.35, Enum.EasingStyle.Quart, Enum.EasingDirection.Out),
-				{Rotation = 360}
-			):Play()
-		else
-			TweenService:Create(
-				LeftFrame,
-				TweenInfo.new(.35, Enum.EasingStyle.Quart, Enum.EasingDirection.Out),
-				{Size = UDim2.new(0, 41,0, 331)}
-			):Play()
-			TweenService:Create(
-				ShadowFrame,
-				TweenInfo.new(.35, Enum.EasingStyle.Quart, Enum.EasingDirection.Out),
-				{BackgroundTransparency = 1}
-			):Play()
-			TweenService:Create(
-				LeftFrameBtnIcon,
-				TweenInfo.new(.35, Enum.EasingStyle.Quart, Enum.EasingDirection.Out),
-				{Rotation = 270}
-			):Play()
-			TweenService:Create(
-				SecondaryTabs,
-				TweenInfo.new(.35, Enum.EasingStyle.Quart, Enum.EasingDirection.Out),
-				{Size = UDim2.new(0, 144,0, 0)}
-			):Play()
-			TweenService:Create(
-				MainTabsBtnIcon,
-				TweenInfo.new(.35, Enum.EasingStyle.Quart, Enum.EasingDirection.Out),
-				{Rotation = 270}
-			):Play()
-			wait(.35)
-			ShadowFrame.Visible = false
-		end
-	end)
-	local function YLNRBC_fake_script() -- MainTabsBtn.MainTabsBtnScript 
-		local script = Instance.new('LocalScript', MainTabsBtn)
-
-		local TweenService = game:GetService("TweenService")
-
-		local MainTabs = script.Parent.Parent.MainTabsBtn.Parent.Parent.MainTabs
-
-		local tog2 = true
-
-		script.Parent.MouseButton1Click:Connect(function()
-			if LeftFrame.Size == UDim2.new(0, 41,0, 331) then
-				tog3 = false
-			end
-			tog2 = not tog2
-			if tog2 then
-				TweenService:Create(
-					MainTabsBtnIcon,
-					TweenInfo.new(.35, Enum.EasingStyle.Quart, Enum.EasingDirection.Out),
-					{Rotation = 360}
-				):Play()
-				TweenService:Create(
-					SecondaryTabs,
-					TweenInfo.new(.35, Enum.EasingStyle.Quart, Enum.EasingDirection.Out),
-					{Size = UDim2.new(0, 144,0, 172)}
-				):Play()
-			else
-				TweenService:Create(
-					MainTabsBtnIcon,
-					TweenInfo.new(.35, Enum.EasingStyle.Quart, Enum.EasingDirection.Out),
-					{Rotation = 270}
-				):Play()
-				TweenService:Create(
-					SecondaryTabs,
-					TweenInfo.new(.35, Enum.EasingStyle.Quart, Enum.EasingDirection.Out),
-					{Size = UDim2.new(0, 144,0, 0)}
-				):Play()
-			end
-		end)
+	-- Hover sidebar: expand while hovered, collapse after leaving.
+	local sidebarExpanded = false
+	local sidebarTweenInfo = TweenInfo.new(.28, Enum.EasingStyle.Quart, Enum.EasingDirection.Out)
+	local function setSidebarExpanded(expanded)
+		if sidebarExpanded == expanded then return end
+		sidebarExpanded = expanded
+		local width = expanded and 144 or 41
+		local tabsHeight = expanded and 172 or 0
+		TweenService:Create(LeftFrame, sidebarTweenInfo, {Size = UDim2.new(0, width, 0, 331)}):Play()
+		TweenService:Create(SecondaryTabs, sidebarTweenInfo, {Size = UDim2.new(0, 144, 0, tabsHeight)}):Play()
 	end
-	coroutine.wrap(YLNRBC_fake_script)()
-	
+
+	LeftFrameBtn.Active = false
+	LeftFrame.MouseEnter:Connect(function()
+		setSidebarExpanded(true)
+	end)
+	LeftFrame.MouseLeave:Connect(function()
+		setSidebarExpanded(false)
+	end)
 	local function NSSL_fake_script() -- MainFrameGlow.MainFrameGlowDrag 
 		local script = Instance.new('LocalScript', MainFrameGlow)
 
@@ -597,6 +520,7 @@ function WindowTable:Window(Htitle,GMtitle,toclose)
 		TabBtn.TextColor3 = Color3.fromRGB(0, 0, 0)
 		TabBtn.TextSize = 14.000
 		TabBtn.MouseButton1Click:Connect(function()
+			setSidebarExpanded(false)
 			for i, v in next, pagesFolder:GetChildren() do
 				if v.Name == "NewPages" then
 					TweenService:Create(
